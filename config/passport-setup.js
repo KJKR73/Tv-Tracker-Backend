@@ -1,5 +1,5 @@
 const passport = require("passport");
-const LocalStratergy = require("passport-local");
-const GoogleStratergy = require("passport-google-oauth");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 passport.use(new GoogleStratergy({}), () => {});
