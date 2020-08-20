@@ -3,9 +3,10 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const { User, validate_user_body } = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const { issueJwt } = require("../utils/issue_jwt");
 
 // Create a new user
-router.post("/signup", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { error } = validate_user_body(req.body);
 
   if (error) {
@@ -41,10 +42,12 @@ router.post("/signup", async (req, res) => {
   // Else save the user
   user
     .save()
-    .then(() => {
-      res.json(user);
+    .then((user) => {
+      res.json({ message: "successs", user: user });
     })
     .catch(() => {
       res.status(500).json("Backend error occured");
     });
 });
+
+router.post("/login", (req, res) => {});
