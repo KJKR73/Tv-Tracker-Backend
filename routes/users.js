@@ -29,25 +29,55 @@ router.post("/register", async (req, res) => {
   // Encrypt the user passoword before saving to the database
   const hashedPass = await bcrypt.hash(req.body.password, salt);
 
-  const user = new User({
+  const newUser = new User({
     username: req.body.username,
     email: req.body.email,
     password: hashedPass,
   });
 
-  if (!user) {
-    res.status(400).json("Error creating an id with these credentials");
+  if (!newUser) {
+    return res.status(400).json("Error creating an id with these credentials");
   }
+  console.log(newUser);
 
   // Else save the user
-  user
+  newUser
     .save()
     .then((user) => {
-      res.json({ message: "successs", user: user });
+      return res.status(200).json({ success: true, user: user });
     })
-    .catch(() => {
-      res.status(500).json("Backend error occured");
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json("Backend error occured");
     });
 });
 
-router.post("/login", (req, res) => {});
+router.post("/login", (req, res) => {
+  const { username, email, password } = req.body;
+
+  // Find the user if he exists
+  User.findOne({ username, email })
+    .then(async (user) => {
+      if (!user) {
+        return res.status(500).json({
+          err: "The user does not exist or credientials are incorrect",
+        });
+      }
+
+      // if user is present check the credentails
+      const validateUser = await bcrypt.compare(password, user.password);
+      console.log(validateUser);
+      if (!validateUser) {
+        return res.status(500).json("Invalid username or password");
+      }
+
+      // issue the token else
+      const token = issueJwt(user);
+      return res.status(200).json({ success: true, token: token });
+    })
+    .catch((err) => {
+      return res.status(500).send("Backend error occured");
+    });
+});
+
+module.exports = router;

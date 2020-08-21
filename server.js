@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { urlencoded } = require("express");
 require("dotenv").config();
+const userRouter = require("./routes/users");
 
 const app = express();
 const port = process.env.PORT || 7000;
@@ -11,6 +12,7 @@ const port = process.env.PORT || 7000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api", userRouter);
 
 const uri = process.env.ATLAB_DB_URI;
 
