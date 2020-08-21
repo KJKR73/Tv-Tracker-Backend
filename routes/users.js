@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const { User, validate_user_body } = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const { issueJwt } = require("../utils/issue_jwt");
+const passport = require("passport");
 
 // Create a new user
 router.post("/register", async (req, res) => {
@@ -52,6 +52,7 @@ router.post("/register", async (req, res) => {
     });
 });
 
+// Login here
 router.post("/login", (req, res) => {
   const { username, email, password } = req.body;
 
@@ -73,11 +74,22 @@ router.post("/login", (req, res) => {
 
       // issue the token else
       const token = issueJwt(user);
-      return res.status(200).json({ success: true, token: token });
+      return res
+        .status(200)
+        .json({ success: true, user_id: user._id, token: token.token });
     })
     .catch((err) => {
       return res.status(500).send("Backend error occured");
     });
 });
+
+// Test route
+router.get(
+  "/test",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.status(200).send("Welcome to the home page");
+  }
+);
 
 module.exports = router;

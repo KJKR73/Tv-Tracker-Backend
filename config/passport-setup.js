@@ -2,7 +2,6 @@ const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const { User } = require("../models/user.model");
-const { function } = require("@hapi/joi");
 
 // Define the options
 const config_options = {

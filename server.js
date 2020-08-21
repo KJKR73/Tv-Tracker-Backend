@@ -5,11 +5,14 @@ const cors = require("cors");
 const { urlencoded } = require("express");
 require("dotenv").config();
 const userRouter = require("./routes/users");
+const passport = require("passport");
 
 const app = express();
 const port = process.env.PORT || 7000;
+require("./config/passport-setup")(passport);
 
 app.use(cors());
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", userRouter);
