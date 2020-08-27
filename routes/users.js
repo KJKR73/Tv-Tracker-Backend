@@ -57,7 +57,7 @@ router.post("/login", (req, res) => {
   const { username, email, password } = req.body;
 
   // Find the user if he exists
-  User.findOne({ username, email })
+  User.findOne({ email })
     .then(async (user) => {
       if (!user) {
         return res.status(500).json({
@@ -88,7 +88,7 @@ router.get(
   "/test",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.status(200).send("Welcome to the home page");
+    res.status(200).send(req.user);
   }
 );
 
