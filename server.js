@@ -5,6 +5,7 @@ const cors = require("cors");
 const { urlencoded } = require("express");
 require("dotenv").config();
 const userRouter = require("./routes/users");
+const seriesRouter = require("./routes/series");
 const passport = require("passport");
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", userRouter);
+app.use("/series", seriesRouter);
 
 const uri = process.env.ATLAB_DB_URI;
 
