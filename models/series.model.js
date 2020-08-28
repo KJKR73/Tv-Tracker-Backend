@@ -13,6 +13,7 @@ const seriesSchema = mongoose.Schema({
   },
   cover: {
     type: String,
+    default: "",
   },
 });
 

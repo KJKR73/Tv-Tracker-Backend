@@ -31,5 +31,13 @@ function validate_tracker(data) {
   return schema.validate(data);
 }
 
+function validate_initialize_tracker(data) {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+  });
+  return schema.validate(data);
+}
+
 exports.Tracker = Tracker;
 exports.validate_tracker = validate_tracker;
+exports.validate_initialize_tracker = validate_initialize_tracker;
