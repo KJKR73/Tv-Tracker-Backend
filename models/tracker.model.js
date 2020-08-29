@@ -19,6 +19,24 @@ const trackerSchema = mongoose.Schema({
       },
     },
   ],
+
+  dropped: [
+    {
+      name: {
+        type: String,
+        maxlength: 200,
+        required: true,
+      },
+      total: {
+        type: String,
+        default: "?",
+      },
+      last: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
 });
 
 const Tracker = mongoose.model("Tracker", trackerSchema);

@@ -60,15 +60,16 @@ router.post("/addNewSeries", async (req, res) => {
   }
 
   // Check if the series already exist
-  const result = false;
-  if (tracker.watching[0] === undefined) {
+  var result = false;
+  if (tracker.watching.length > 0) {
     tracker.watching.forEach((element) => {
-      if (element._id === req.body.s_id) {
+      if (element["_id"] == req.body.s_id) {
         result = true;
       }
     });
   }
 
+  console.log(result);
   if (result) {
     return res.status(400).send("The series already exists in your tracker");
   }
