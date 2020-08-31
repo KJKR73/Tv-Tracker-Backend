@@ -15,6 +15,10 @@ const seriesSchema = mongoose.Schema({
     type: String,
     default: "",
   },
+  season: {
+    type: String,
+    default: "1",
+  },
 });
 
 const Series = mongoose.model("Series", seriesSchema);
@@ -24,6 +28,7 @@ function validate_series(data) {
     name: Joi.string().max(50).required(),
     total: Joi.string(),
     cover: Joi.string(),
+    season: Joi.string(),
   });
   return schema.validate(data);
 }

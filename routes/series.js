@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const { Series, validate_series } = require("../models/series.model");
+const { compareSync } = require("bcrypt");
 
 router.post("/add", async (req, res) => {
   const { error } = validate_series(req.body);
@@ -31,6 +32,14 @@ router.get("/search", async (req, res) => {
   }
 
   return res.status(200).send(result);
+});
+
+router.get("/getall", async (req, res) => {
+  const result = await Series.find({});
+  if (!result) {
+    return res.status(400).send("Backend Problem");
+  }
+  res.status(200).send(result);
 });
 
 module.exports = router;
