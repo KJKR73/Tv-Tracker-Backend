@@ -95,4 +95,13 @@ router.post("/addNewSeries", async (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////////////
 
+router.post("/getracker", async (req, res) => {
+  const result = await Tracker.findById(req.body.id);
+  if (!result) {
+    return res.status(400).send("Tracker does not exit");
+  }
+
+  res.status(200).json(result);
+});
+
 module.exports = router;

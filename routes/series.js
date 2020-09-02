@@ -24,7 +24,7 @@ router.post("/add", async (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.get("/search", async (req, res) => {
+router.post("/search", async (req, res) => {
   // User will search here and send the keyword in the body
   const result = await Series.find({ name: new RegExp(req.body.query, "i") });
   if (!result) {
