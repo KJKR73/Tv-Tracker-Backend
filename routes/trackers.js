@@ -69,7 +69,6 @@ router.post("/addNewSeries", async (req, res) => {
     });
   }
 
-  console.log(result);
   if (result) {
     return res.status(400).send("The series already exists in your tracker");
   }
@@ -79,7 +78,6 @@ router.post("/addNewSeries", async (req, res) => {
     _id: series._id,
     name: series.name,
     total: series.total,
-    cover: series.cover,
   };
 
   Tracker.findOneAndUpdate(
@@ -90,7 +88,7 @@ router.post("/addNewSeries", async (req, res) => {
       },
     }
   )
-    .then((ans) => res.status(200).send(ans))
+    .then((ans) => res.status(200).send("success"))
     .catch((err) => res.status(400).send(err));
 });
 //////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +100,52 @@ router.post("/getracker", async (req, res) => {
   }
 
   res.status(200).json(result);
+});
+
+router.post("/update", async (req, res) => {
+  const tracker = await Tracker.findById(req.body.id);
+  if (!tracker) {
+    return res.status(400).json("Backend Error");
+  }
+
+  // Check if the series is present in tracker
+  var result = false;
+  if (tracker.watching.length > 0) {
+    tracker.watching.forEach((element) => {
+      if (element["_id"] == req.body.s_id) {
+        result = true;
+      }
+    });
+  }
+
+  if (!result) {
+    return res.status(400).send("The series does not exists in your tracker");
+  }
+
+  // update the tracke else
+  const index = tracker.watching.findIndex(
+    (obj) => obj["_id"] == req.body.s_id
+  );
+  var obj = tracker.watching.find((obj) => obj["_id"] == req.body.s_id);
+  const newObj = {
+    _id: obj._id,
+    name: obj.name,
+    total: req.body.total,
+    current: req.body.current,
+  };
+
+  var trackerList = tracker.watching;
+  trackerList[index] = newObj;
+
+  // update tracker
+  await Tracker.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      watching: trackerList,
+    }
+  )
+    .then((data) => res.status(200).json("success"))
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;

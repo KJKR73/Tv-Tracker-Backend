@@ -19,6 +19,9 @@ const seriesSchema = mongoose.Schema({
     type: String,
     default: "1",
   },
+  synopsis: {
+    type: String,
+  },
 });
 
 const Series = mongoose.model("Series", seriesSchema);
@@ -29,6 +32,7 @@ function validate_series(data) {
     total: Joi.string(),
     cover: Joi.string(),
     season: Joi.string(),
+    synopsis: Joi.String(),
   });
   return schema.validate(data);
 }
