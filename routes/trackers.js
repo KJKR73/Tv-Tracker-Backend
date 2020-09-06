@@ -4,6 +4,7 @@ const {
   Tracker,
   validate_tracker,
   validate_initialize_tracker,
+  validate_update_tracker,
 } = require("../models/tracker.model");
 const { User } = require("../models/user.model");
 const passport = require("passport");
@@ -102,7 +103,13 @@ router.post("/getracker", async (req, res) => {
   res.status(200).json(result);
 });
 
+///////////////////////////////////////////////////////////////////////////////
 router.post("/update", async (req, res) => {
+  const { error } = validate_update_tracker(req.body);
+  if (error) {
+    return res.status(400).json(error.details[0].message);
+  }
+
   const tracker = await Tracker.findById(req.body.id);
   if (!tracker) {
     return res.status(400).json("Backend Error");
@@ -129,7 +136,7 @@ router.post("/update", async (req, res) => {
   var obj = tracker.watching.find((obj) => obj["_id"] == req.body.s_id);
   const newObj = {
     _id: obj._id,
-    name: obj.name,
+    name: req.body.name,
     total: req.body.total,
     current: req.body.current,
   };
@@ -147,5 +154,5 @@ router.post("/update", async (req, res) => {
     .then((data) => res.status(200).json("success"))
     .catch((err) => console.log(err));
 });
-
+///////////////////////////////////////////////////////////////////////////////
 module.exports = router;
