@@ -6,7 +6,8 @@ const { urlencoded } = require("express");
 require("dotenv").config();
 const userRouter = require("./routes/users");
 const seriesRouter = require("./routes/series");
-const trackerRouter = require("./routes/trackers");
+const watchingRouter = require("./routes/watching");
+const completedRouter = require("./routes/completed");
 const miscRouter = require("./routes/miscs");
 const passport = require("passport");
 
@@ -20,7 +21,8 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api", userRouter);
 app.use("/series", seriesRouter);
-app.use("/tracker", trackerRouter);
+app.use("/tracker/watching", watchingRouter);
+app.use("/tracker/completed", completedRouter);
 app.use("/misc", miscRouter);
 
 const uri = process.env.ATLAB_DB_URI;

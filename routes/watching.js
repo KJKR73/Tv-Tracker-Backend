@@ -9,7 +9,6 @@ const {
 const { User } = require("../models/user.model");
 const passport = require("passport");
 const { Series } = require("../models/series.model");
-const { bool } = require("@hapi/joi");
 
 // Intit the user ////////////////////////////////////////////////////////////////////
 router.post("/initializeUserTracker", async (req, res) => {
@@ -94,6 +93,7 @@ router.post("/addNewSeries", async (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////////////
 
+// GET the tracker of the user ///////////////////////////
 router.post("/getracker", async (req, res) => {
   const result = await Tracker.findById(req.body.id);
   if (!result) {
@@ -102,8 +102,9 @@ router.post("/getracker", async (req, res) => {
 
   res.status(200).json(result);
 });
+/////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
+//Update the tracker//////////////////////////////////////////////////////////
 router.post("/update", async (req, res) => {
   const { error } = validate_update_tracker(req.body);
   if (error) {
@@ -154,5 +155,6 @@ router.post("/update", async (req, res) => {
     .then((data) => res.status(200).json("success"))
     .catch((err) => console.log(err));
 });
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 module.exports = router;

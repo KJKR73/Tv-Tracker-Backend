@@ -37,6 +37,24 @@ const trackerSchema = mongoose.Schema({
       },
     },
   ],
+
+  completed: [
+    {
+      name: {
+        type: String,
+        maxlength: 200,
+        required: true,
+      },
+      total: {
+        type: String,
+        default: "?",
+      },
+      date: {
+        type: Date,
+        default: Date.now(),
+      },
+    },
+  ],
 });
 
 const Tracker = mongoose.model("Tracker", trackerSchema);
