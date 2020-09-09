@@ -157,4 +157,36 @@ router.post("/update", async (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////
 
+router.post("/deleteSeries", async (req, res) => {
+  const tracker = await Tracker.findById(req.body.id);
+  if (!tracker) {
+    return res.status(400).json("Invalid Tracker");
+  }
+
+  // Check if the series is preset in the tracker watching list
+  var _check = false;
+  tracker.watching.forEach((element) => {
+    if (element._id == req.body.s_id) {
+      _check = true;
+    }
+  });
+
+  if (!_check) {
+    return res.status(200).json("The series does not exist in your tracker");
+  }
+
+  var new_watching = tracker.watching.filter(
+    (obj) => obj["_id"] != req.body.s_id
+  );
+
+  Tracker.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      watching: new_watching,
+    }
+  )
+    .then((data) => res.status(200).send("success"))
+    .catch((err) => console.log(err));
+});
+
 module.exports = router;

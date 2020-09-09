@@ -52,7 +52,7 @@ router.post("/add_to_completed", async (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.get("/get_completed", async (req, res) => {
+router.post("/get_completed", async (req, res) => {
   const tracker = await Tracker.findById(req.body.id);
   if (!tracker) {
     return res.status(400).send("Tracker does not exit");
