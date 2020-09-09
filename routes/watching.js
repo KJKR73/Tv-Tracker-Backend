@@ -73,6 +73,34 @@ router.post("/addNewSeries", async (req, res) => {
     return res.status(400).send("The series already exists in your tracker");
   }
 
+  var drop_result = false;
+  if (tracker.dropped.length > 0) {
+    tracker.dropped.forEach((element) => {
+      if (element["_id"] == req.body.s_id) {
+        drop_result = true;
+      }
+    });
+  }
+
+  if (drop_result) {
+    return res
+      .status(400)
+      .send("You have already dropped this series Re-Add from Dropped Page");
+  }
+
+  var result_comp = false;
+  if (tracker.completed.length > 0) {
+    tracker.completed.forEach((element) => {
+      if (element["_id"] == req.body.s_id) {
+        result_comp = true;
+      }
+    });
+  }
+
+  if (result_comp) {
+    return res.status(400).send("You Have Already Completed this Series");
+  }
+
   // If user exist add his/her series
   const add_new = {
     _id: series._id,
