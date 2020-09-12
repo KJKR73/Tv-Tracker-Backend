@@ -38,6 +38,7 @@ router.post("/add_to_completed", async (req, res) => {
     name: obj["name"],
     total: obj["total"],
     date: Date.now(),
+    season: obj["season"],
   };
   await Tracker.findByIdAndUpdate(
     { _id: req.body.id },

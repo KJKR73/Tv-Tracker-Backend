@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
+  image: {
+    type: String,
+    default: "null",
+  },
 });
 
 const User = mongoose.model("User", userSchema);
@@ -31,9 +35,19 @@ function validate_user_body(data) {
     username: Joi.string().min(3).max(50).required(),
     email: Joi.string().email().min(5).max(100).required(),
     password: Joi.string().min(4).max(20).required(),
+    image: Joi.string(),
+  });
+  return schema.validate(data);
+}
+
+function validate_user(data) {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+    image: Joi.string().required(),
   });
   return schema.validate(data);
 }
 
 exports.User = User;
 exports.validate_user_body = validate_user_body;
+exports.validate_user = validate_user;

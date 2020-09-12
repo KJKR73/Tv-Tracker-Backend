@@ -106,6 +106,7 @@ router.post("/addNewSeries", async (req, res) => {
     _id: series._id,
     name: series.name,
     total: series.total,
+    season: series.season,
   };
 
   Tracker.findOneAndUpdate(

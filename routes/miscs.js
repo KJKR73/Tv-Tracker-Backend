@@ -31,6 +31,7 @@ function validate_image_body(body) {
   return schema.validate(body);
 }
 
+// Retunr data for the Pie Chart
 router.post("/getPieData", async (req, res) => {
   const tracker = await Tracker.findById(req.body.id);
   if (!tracker) {
@@ -63,6 +64,40 @@ router.post("/getPieData", async (req, res) => {
   });
 
   res.status(200).send(dataArray);
+});
+
+// Get the rest of data
+router.post("/getHomeInfo", async (req, res) => {
+  const tracker = await Tracker.findById(req.body.id);
+  if (!tracker) {
+    return res.status(400).send("Error Loading data");
+  }
+
+  const watching_data_len = tracker.watching.length;
+  const dropped_data_len = tracker.dropped.length;
+  const completed_data_len = tracker.completed.length;
+
+  const total = watching_data_len + dropped_data_len + completed_data_len;
+
+  var dataArray = [];
+  dataArray.push({
+    name: "Watching",
+    len: watching_data_len,
+  });
+  dataArray.push({
+    name: "Dropped",
+    len: dropped_data_len,
+  });
+  dataArray.push({
+    name: "Completed",
+    len: completed_data_len,
+  });
+  dataArray.push({
+    name: "Total",
+    len: total,
+  });
+
+  res.status(200).json(dataArray);
 });
 
 module.exports = router;

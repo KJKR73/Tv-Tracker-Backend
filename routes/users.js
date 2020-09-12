@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { User, validate_user_body } = require("../models/user.model");
+const {
+  User,
+  validate_user_body,
+  validate_user,
+} = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const { issueJwt } = require("../utils/issue_jwt");
 const passport = require("passport");
+const { route } = require("./miscs");
 
 // Create a new user
 router.post("/register", async (req, res) => {
@@ -33,6 +38,7 @@ router.post("/register", async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: hashedPass,
+    image: "null",
   });
 
   if (!newUser) {
@@ -74,9 +80,12 @@ router.post("/login", (req, res) => {
 
       // issue the token else
       const token = issueJwt(user);
-      return res
-        .status(200)
-        .json({ success: true, user_id: user._id, token: token.token });
+      return res.status(200).json({
+        success: true,
+        user_id: user._id,
+        token: token.token,
+        username: user["username"],
+      });
     })
     .catch((err) => {
       return res.status(500).send("Backend error occured");
@@ -91,5 +100,47 @@ router.get(
     res.status(200).send(req.user);
   }
 );
+
+router.post("/saveImage", async (req, res) => {
+  const { error } = validate_user(req.body);
+  if (error) {
+    return res.status(400).json(error.details[0].message);
+  }
+
+  // Get user
+  const user = await User.findById(req.body.id);
+  if (!user) {
+    return res.status(400).json("User Not Found");
+  }
+
+  // Else add the user image
+  User.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      image: req.body.image,
+    }
+  )
+    .then((data) => res.status(200).json("success"))
+    .catch((err) => console.log(err));
+});
+
+router.post("/getImage", async (req, res) => {
+  const user = await User.findById(req.body.id);
+  if (!user) {
+    return res.status(400).json("User Not Found");
+  }
+  if (user.image == "") {
+    return res.status(400).send("Invalid Image");
+  }
+  res.status(200).json(user.image);
+});
+
+router.post("/getUsername", async (req, res) => {
+  const user = await User.findById(req.body.id);
+  if (!user) {
+    return res.status(400).json("User Not Found");
+  }
+  res.status(200).json(user.username);
+});
 
 module.exports = router;

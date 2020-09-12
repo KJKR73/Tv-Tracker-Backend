@@ -17,6 +17,10 @@ const trackerSchema = mongoose.Schema({
         type: Number,
         default: 0,
       },
+      season: {
+        type: String,
+        default: "?",
+      },
     },
   ],
 
@@ -34,6 +38,10 @@ const trackerSchema = mongoose.Schema({
       last: {
         type: Number,
         default: 0,
+      },
+      season: {
+        type: String,
+        default: "?",
       },
       date: {
         type: Date,
@@ -56,6 +64,10 @@ const trackerSchema = mongoose.Schema({
       date: {
         type: Date,
         default: Date.now(),
+      },
+      season: {
+        type: String,
+        default: "?",
       },
     },
   ],

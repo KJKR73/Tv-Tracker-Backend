@@ -57,6 +57,7 @@ router.post("/dropSeries", async (req, res) => {
     total: obj["total"],
     last: obj["current"],
     date: Date.now(),
+    season: obj["season"],
   };
 
   // Save the data
